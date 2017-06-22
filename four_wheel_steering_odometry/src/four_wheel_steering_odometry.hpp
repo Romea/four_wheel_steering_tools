@@ -1,0 +1,54 @@
+/*
+Ce noeud a pour but de récupérer les informations du topic Joint_States pour reconstruire les données odométriques du modèle bicyclette et de les publier dans un topic.
+Ces données sont les braquages avant et arrière, les vitesses de braquage avant et arrière, la vitesse du véhicule, son accélération et son jerk.
+Ce fichier .hpp sert à la création d'une classe propre à ce noeud : OdometryJointMessage.
+*/
+
+#include <iostream>
+#include <string>
+#include <ros/ros.h>
+#include <std_msgs/Float64.h>
+#include <sstream>
+#include <four_wheel_steering_msgs/FourWheelSteeringStamped.h>
+#include <sensor_msgs/JointState.h>
+#include <vector>
+
+class OdometryJointMessage
+{
+public:
+  OdometryJointMessage(ros::NodeHandle& nb);
+
+  // Méthode d'un callback pour récupérer les données du topic mais qui aussi reconstruit les variables du modèle bicyclette
+  void odomJointCallback (const sensor_msgs::JointState::ConstPtr& val);
+
+  // Méthode pour récupérer les données géométriques du robot
+  void setVehicleParam ();
+
+  //Méthode qui remplit le message qui sera envoyé sur le topic
+  void odomMessage (four_wheel_steering_msgs::FourWheelSteering &msg);
+
+private:
+
+  double front_steering_angle_;
+  double rear_steering_angle_;
+  double front_steering_angle_velocity_;
+  double rear_steering_angle_velocity_;
+  double speed_;
+  double speedprevious_;
+  double acceleration_;
+  double track_;
+  double wheel_base_;
+  double wheel_radius_;
+//  double thetap_; // remain unused for the moment
+  double jerk_;
+  double accelerationprevious_;
+
+  double previous_front_left_steering_angle_;
+  double previous_front_right_steering_angle_;
+  double previous_rear_left_steering_angle_;
+  double previous_rear_right_steering_angle_;
+
+  ros::Time previous;
+  ros::NodeHandle nh_;
+
+};
