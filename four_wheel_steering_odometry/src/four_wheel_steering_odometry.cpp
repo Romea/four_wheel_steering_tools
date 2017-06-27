@@ -29,17 +29,9 @@ void OdometryJointMessage::odomJointCallback (const sensor_msgs::JointState::Con
   double rear_left_wheel_velocity=val->velocity[5];
   double rear_right_wheel_velocity=val->velocity[7];
 
-//  double front_left_wheel_angle_velocity=val->velocity[0];
-//  double front_right_wheel_angle_velocity=val->velocity[2];
-//  double rear_left_wheel_angle_velocity=val->velocity[4];
-//  double rear_right_wheel_angle_velocity=val->velocity[6];
-
   /// création de variables temporelles pour les dérivées qui seront calculer
   ros::Duration ros_diff_time = ros::Time::now() - previous;
   double diff_time = ros_diff_time.toSec();
-
-
-
 
   /// Calcul du front et rear steering angle
   front_steering_angle_=2/((1/tan(front_left_steering_angle))+(1/tan(front_right_steering_angle)));
@@ -58,7 +50,6 @@ void OdometryJointMessage::odomJointCallback (const sensor_msgs::JointState::Con
   speedprevious_=speed_;
   accelerationprevious_=acceleration_;
   previous = ros::Time::now();
-
 
   /// Calcul du front et rear steering velocity
 
@@ -83,63 +74,62 @@ void OdometryJointMessage::odomJointCallback (const sensor_msgs::JointState::Con
    // Pour tester les valeurs seuls dans le terminal avec ROS
 //  double valeur_test=front_left_steering_velocity;
 //  ROS_INFO_STREAM ("valeur test"<<valeur_test); // pour faire des tests sur les valeurs.
+}
 
-
+bool OdometryJointMessage::getVehicleGeometryParam(const std::string& param_name, double& param_value)
+{
+  bool success = true;
+  std::string param_path;
+  if(param_value < 0.0001)
+  {
+    if(success &= nh_.searchParam("vehicle_geometry/"+param_name, param_path))
+    {
+      success &= nh_.getParam(param_path, param_value);
+      ROS_INFO_STREAM(param_name<<" "<<param_value);
+    }
+  }
+  return success;
 }
 
 void OdometryJointMessage::setVehicleParam()
 {
-  int flag=0; // flag pour compter le nombre de tentative de récupération des valeurs
-  while (1)
+  bool success = false;
+  ros::Rate r(1);
+  while (ros::ok() && success == false)
   {
+    r.sleep();
 
-    bool error = false;
-
-    if (track_ > 0.0 || nh_.getParam("track", track_)) //essai pour récupérer la voie
+    success = getVehicleGeometryParam("track", track_);
+    if(success == false)
     {
-      ROS_WARN_STREAM("track "<<track_);
+      ROS_WARN_STREAM("Failed to get param vehicle_geometry/track ; Will retry every second");
+      continue;
     }
-    else
-      error = true;
-
-    if (wheel_base_ > 0.0 || nh_.getParam("wheel_base", wheel_base_)) // essai pour récupérer l'empattement
+    success = getVehicleGeometryParam("wheel_base", wheel_base_);
+    if(success == false)
     {
-      ROS_WARN_STREAM("wheel_base "<<wheel_base_);
+      ROS_WARN_STREAM("Failed to get param vehicle_geometry/wheel_base ; Will retry every second");
+      continue;
     }
-    else
-      error = true;
-
-    if (wheel_radius_ > 0.0 || nh_.getParam("wheel_radius", wheel_radius_)) // essai pour récupérer le rayon des roue
+    success = getVehicleGeometryParam("wheel_radius", wheel_radius_);
+    if(success == false)
     {
-      ROS_WARN_STREAM("wheel_radius "<<wheel_radius_);
-    }
-    else
-      error = true;
-
-    if(error) // delai pour nouvelle tentative
-    {
-      flag ++;
-      ros::Duration(2).sleep();
-    }
-    else
-      break;
-
-    if(flag==5)
-    {
-      ROS_WARN_STREAM("unable to get the parameters");
-      break;
+      ROS_WARN_STREAM("Failed to get param vehicle_geometry/wheel_radius ; Will retry every second");
+      continue;
     }
   }
 }
 
-void OdometryJointMessage::odomMessage (four_wheel_steering_msgs::FourWheelSteering &msg)
+void OdometryJointMessage::odomMessage (four_wheel_steering_msgs::FourWheelSteeringStamped &msg)
 {
-  msg.front_steering_angle=front_steering_angle_;
-  msg.rear_steering_angle=rear_steering_angle_;
-  msg.front_steering_angle_velocity=front_steering_angle_velocity_;
-  msg.rear_steering_angle_velocity=rear_steering_angle_velocity_;
-  msg.speed=speed_;
-  msg.acceleration=acceleration_;
-  msg.jerk=jerk_;
+  msg.header.stamp = ros::Time::now();
+  msg.header.frame_id = "/base_link";
+  msg.data.front_steering_angle=front_steering_angle_;
+  msg.data.rear_steering_angle=rear_steering_angle_;
+  msg.data.front_steering_angle_velocity=front_steering_angle_velocity_;
+  msg.data.rear_steering_angle_velocity=rear_steering_angle_velocity_;
+  msg.data.speed=speed_;
+  msg.data.acceleration=acceleration_;
+  msg.data.jerk=jerk_;
 }
 

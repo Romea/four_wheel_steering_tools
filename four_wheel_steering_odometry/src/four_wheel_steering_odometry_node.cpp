@@ -21,7 +21,7 @@ int main(int argc, char **argv)
   ros::Rate loop_rate(10);
   while (ros::ok())
   {
-    four_wheel_steering_msgs::FourWheelSteering msg;
+    four_wheel_steering_msgs::FourWheelSteeringStamped msg;
     ojm.odomMessage(msg);
     odom_msgs.publish(msg);
 

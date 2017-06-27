@@ -25,9 +25,17 @@ public:
   void setVehicleParam ();
 
   //Méthode qui remplit le message qui sera envoyé sur le topic
-  void odomMessage (four_wheel_steering_msgs::FourWheelSteering &msg);
+  void odomMessage (four_wheel_steering_msgs::FourWheelSteeringStamped &msg);
 
 private:
+
+  /*
+   * get a param from the nearest vehicle_geomtry namespace
+   * @in param_name : param to look for in namespace
+   * @out param_value : value of the param
+   * @return true if succeded false otherwise
+   * */
+  bool getVehicleGeometryParam(const std::string& param_name, double &param_value);
 
   double front_steering_angle_;
   double rear_steering_angle_;
