@@ -16,7 +16,7 @@ int main(int argc, char **argv)
   ojm.setVehicleParam();
 
   ros::Subscriber sub = nb.subscribe("joint_states", 1, &OdometryJointMessage::odomJointCallback, &ojm);
-  ros::Publisher odom_msgs = nb.advertise<four_wheel_steering_msgs::FourWheelSteering>("odom_steer",1);
+  ros::Publisher odom_msgs = nb.advertise<four_wheel_steering_msgs::FourWheelSteeringStamped>("odom_steer",1);
 
   ros::Rate loop_rate(10);
   while (ros::ok())

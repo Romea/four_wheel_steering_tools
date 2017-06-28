@@ -28,7 +28,6 @@ public:
   void odomMessage (four_wheel_steering_msgs::FourWheelSteeringStamped &msg);
 
 private:
-
   /*
    * get a param from the nearest vehicle_geomtry namespace
    * @in param_name : param to look for in namespace

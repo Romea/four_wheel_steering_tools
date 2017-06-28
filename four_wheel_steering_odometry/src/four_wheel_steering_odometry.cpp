@@ -6,6 +6,7 @@ Ce fichier .cpp permet de décrire les méthodes utilisées dans le noeud.
 
 #include "four_wheel_steering_odometry.hpp"
 
+#include <exception>
 
 OdometryJointMessage::OdometryJointMessage(ros::NodeHandle &nb):
   nh_(nb),
@@ -82,12 +83,14 @@ bool OdometryJointMessage::getVehicleGeometryParam(const std::string& param_name
   std::string param_path;
   if(param_value < 0.0001)
   {
-    if(success &= nh_.searchParam("vehicle_geometry/"+param_name, param_path))
+    if(success &= nh_.searchParam(param_name, param_path))
     {
       success &= nh_.getParam(param_path, param_value);
       ROS_INFO_STREAM(param_name<<" "<<param_value);
     }
   }
+  if(success == false)
+    throw std::runtime_error("Failed to get param "+param_name+" ; Will retry every second");
   return success;
 }
 
@@ -97,25 +100,18 @@ void OdometryJointMessage::setVehicleParam()
   ros::Rate r(1);
   while (ros::ok() && success == false)
   {
-    r.sleep();
-
-    success = getVehicleGeometryParam("track", track_);
-    if(success == false)
+    success = true;
+    try
     {
-      ROS_WARN_STREAM("Failed to get param vehicle_geometry/track ; Will retry every second");
-      continue;
+      getVehicleGeometryParam("track", track_);
+      getVehicleGeometryParam("wheel_base", wheel_base_);
+      getVehicleGeometryParam("wheel_radius", wheel_radius_);
     }
-    success = getVehicleGeometryParam("wheel_base", wheel_base_);
-    if(success == false)
+    catch(std::runtime_error e)
     {
-      ROS_WARN_STREAM("Failed to get param vehicle_geometry/wheel_base ; Will retry every second");
-      continue;
-    }
-    success = getVehicleGeometryParam("wheel_radius", wheel_radius_);
-    if(success == false)
-    {
-      ROS_WARN_STREAM("Failed to get param vehicle_geometry/wheel_radius ; Will retry every second");
-      continue;
+      ROS_WARN_STREAM(e.what());
+      success = false;
+      r.sleep();
     }
   }
 }
