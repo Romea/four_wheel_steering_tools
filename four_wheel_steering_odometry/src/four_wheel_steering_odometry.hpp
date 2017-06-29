@@ -36,20 +36,17 @@ private:
    * */
   bool getVehicleGeometryParam(const std::string& param_name, double &param_value);
 
-  double front_steering_angle_;
-  double rear_steering_angle_;
-  double front_steering_angle_velocity_;
-  double rear_steering_angle_velocity_;
-  double speed_;
-  double speedprevious_;
-  double acceleration_;
+  // Param of the vehicle geometry
   double track_;
   double wheel_base_;
   double wheel_radius_;
-//  double thetap_; // remain unused for the moment
-  double jerk_;
-  double accelerationprevious_;
 
+  four_wheel_steering_msgs::FourWheelSteering fws_msg_;
+
+  /// TODO use also FourWheelSteering class for previous values
+  double speedprevious_;
+//  double thetap_; // remain unused for the moment
+  double accelerationprevious_;
   double previous_front_left_steering_angle_;
   double previous_front_right_steering_angle_;
   double previous_rear_left_steering_angle_;

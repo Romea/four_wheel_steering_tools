@@ -10,8 +10,9 @@ Ce fichier .cpp permet de décrire les méthodes utilisées dans le noeud.
 
 OdometryJointMessage::OdometryJointMessage(ros::NodeHandle &nb):
   nh_(nb),
-  track_(0.0), wheel_base_(0.0), wheel_radius_(0.0), front_steering_angle_(0.0), rear_steering_angle_(0.0), front_steering_angle_velocity_(0.0), rear_steering_angle_velocity_(0.0),
-  speed_(0.0), speedprevious_(0.0), acceleration_(0.0), jerk_(0.0), accelerationprevious_(0.0), previous_front_left_steering_angle_(0.0), previous_front_right_steering_angle_(0.0),
+  track_(0.0), wheel_base_(0.0), wheel_radius_(0.0),
+  speedprevious_(0.0), accelerationprevious_(0.0),
+  previous_front_left_steering_angle_(0.0), previous_front_right_steering_angle_(0.0),
   previous_rear_left_steering_angle_(0.0), previous_rear_right_steering_angle_(0.0)
 
 {
@@ -35,21 +36,21 @@ void OdometryJointMessage::odomJointCallback (const sensor_msgs::JointState::Con
   double diff_time = ros_diff_time.toSec();
 
   /// Calcul du front et rear steering angle
-  front_steering_angle_=2/((1/tan(front_left_steering_angle))+(1/tan(front_right_steering_angle)));
-  rear_steering_angle_=2/((1/tan(rear_left_steering_angle))+(1/tan(rear_right_steering_angle)));
+  fws_msg_.front_steering_angle=2/((1/tan(front_left_steering_angle))+(1/tan(front_right_steering_angle)));
+  fws_msg_.rear_steering_angle=2/((1/tan(rear_left_steering_angle))+(1/tan(rear_right_steering_angle)));
 
   /// Calcul de la vitesse, de l'accélération et du jerk
 
   // Formule exacte mais utilisant thetap qui n'est pas implémenté pour l'instant
 //  speed_=sqrt(pow((front_left_wheel_velocity_*wheel_radius_),2)-pow((wheel_base_*thetap_/2),2))+thetap_*track_/2;
 
-  speed_=((front_left_wheel_velocity+front_right_wheel_velocity+rear_left_wheel_velocity+rear_right_wheel_velocity)/4)*wheel_radius_;
-  acceleration_=(speed_-speedprevious_)/diff_time;
-  jerk_=(acceleration_-accelerationprevious_)/diff_time;
+  fws_msg_.speed=((front_left_wheel_velocity+front_right_wheel_velocity+rear_left_wheel_velocity+rear_right_wheel_velocity)/4)*wheel_radius_;
+  fws_msg_.acceleration=(fws_msg_.speed-speedprevious_)/diff_time;
+  fws_msg_.jerk=(fws_msg_.acceleration-accelerationprevious_)/diff_time;
 
   //mise en mémoire des valeurs
-  speedprevious_=speed_;
-  accelerationprevious_=acceleration_;
+  speedprevious_=fws_msg_.speed;
+  accelerationprevious_=fws_msg_.acceleration;
   previous = ros::Time::now();
 
   /// Calcul du front et rear steering velocity
@@ -59,18 +60,18 @@ void OdometryJointMessage::odomJointCallback (const sensor_msgs::JointState::Con
 //  rear_steering_angle_velocity_=sqrt(pow(thetap_*wheel_base_/2,2)+pow(speed_,2))/wheel_radius_;
 
   // Méthode avec le taux de variation des angles de braquages
-   double front_left_steering_velocity= (front_left_steering_angle-previous_front_left_steering_angle_)/diff_time;
-   double front_right_steering_velocity= (front_right_steering_angle-previous_front_right_steering_angle_)/diff_time;
-   double rear_left_steering_velocity= (rear_left_steering_angle-previous_rear_left_steering_angle_)/diff_time;
-   double rear_right_steering_velocity= (rear_right_steering_angle-previous_rear_right_steering_angle_)/diff_time;
+  double front_left_steering_velocity= (front_left_steering_angle-previous_front_left_steering_angle_)/diff_time;
+  double front_right_steering_velocity= (front_right_steering_angle-previous_front_right_steering_angle_)/diff_time;
+  double rear_left_steering_velocity= (rear_left_steering_angle-previous_rear_left_steering_angle_)/diff_time;
+  double rear_right_steering_velocity= (rear_right_steering_angle-previous_rear_right_steering_angle_)/diff_time;
 
-   front_steering_angle_velocity_=(front_left_steering_velocity+front_right_steering_velocity)/2;
-   rear_steering_angle_velocity_=(rear_left_steering_velocity+rear_right_steering_velocity)/2;
+  fws_msg_.front_steering_angle_velocity=(front_left_steering_velocity+front_right_steering_velocity)/2;
+  fws_msg_.rear_steering_angle_velocity=(rear_left_steering_velocity+rear_right_steering_velocity)/2;
 
-   previous_front_left_steering_angle_=front_left_steering_angle;
-   previous_front_right_steering_angle_=front_right_steering_angle;
-   previous_rear_left_steering_angle_=rear_left_steering_angle;
-   previous_rear_right_steering_angle_=rear_right_steering_angle;
+  previous_front_left_steering_angle_=front_left_steering_angle;
+  previous_front_right_steering_angle_=front_right_steering_angle;
+  previous_rear_left_steering_angle_=rear_left_steering_angle;
+  previous_rear_right_steering_angle_=rear_right_steering_angle;
 
    // Pour tester les valeurs seuls dans le terminal avec ROS
 //  double valeur_test=front_left_steering_velocity;
@@ -120,12 +121,6 @@ void OdometryJointMessage::odomMessage (four_wheel_steering_msgs::FourWheelSteer
 {
   msg.header.stamp = ros::Time::now();
   msg.header.frame_id = "/base_link";
-  msg.data.front_steering_angle=front_steering_angle_;
-  msg.data.rear_steering_angle=rear_steering_angle_;
-  msg.data.front_steering_angle_velocity=front_steering_angle_velocity_;
-  msg.data.rear_steering_angle_velocity=rear_steering_angle_velocity_;
-  msg.data.speed=speed_;
-  msg.data.acceleration=acceleration_;
-  msg.data.jerk=jerk_;
+  msg.data = fws_msg_;
 }
 
