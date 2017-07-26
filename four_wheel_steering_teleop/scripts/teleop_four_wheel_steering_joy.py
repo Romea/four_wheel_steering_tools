@@ -32,8 +32,8 @@ class TeleopFourWheelSteeringJoy():
 
         new_cmd = False
         for button in self.enable_button:
-          if data.buttons[button]:
-            new_cmd = True
+            if data.buttons[button]:
+                new_cmd = True
 
         if new_cmd:
             #rospy.loginfo(rospy.get_caller_id() + " axes" + str(data.axes))
