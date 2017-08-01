@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
-<package>
+<package format="2">
   <name>cmd_mux</name>
   <version>3.0.0</version>
   <description>
-      Twist multiplexer, which multiplex several velocity commands (topics) and
-      allows to priorize or disable them (locks).
+      Command multiplexer, which multiplex several twist and four_wheel_steering commands (topics)
+      and allows to priorize or disable them (locks).
   </description>
 
-  <maintainer email="efernandez@clearpathrobotics.com">Enrique Fernandez</maintainer>
+  <maintainer email="vincent.rousseau@irstea.fr">Vincent Rousseau</maintainer>
 
+  <author email="vincent.rousseau@irstea.fr">Vincent Rousseau</author>
   <author email="efernandez@clearpathrobotics.com">Enrique Fernandez</author>
   <author email="siegfried.gevatter@pal-robotics.com">Siegfried-A. Gevatter Pujals</author>
 
@@ -16,16 +17,11 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>roscpp</build_depend>
-  <build_depend>std_msgs</build_depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend>diagnostic_updater</build_depend>
-
-  <run_depend>roscpp</run_depend>
-  <run_depend>std_msgs</run_depend>
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>cmd_mux_msgs</run_depend>
-  <run_depend>diagnostic_updater</run_depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>four_wheel_steering_msgs</depend>
+  <depend>diagnostic_updater</depend>
 
   <!-- Tests -->
   <build_depend>rostest</build_depend>

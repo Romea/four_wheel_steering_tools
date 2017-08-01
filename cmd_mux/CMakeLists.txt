@@ -6,11 +6,12 @@ find_package(catkin REQUIRED
       roscpp
       std_msgs
       geometry_msgs
+      four_wheel_steering_msgs
       diagnostic_updater)
 
 find_package(Boost REQUIRED)
 
-set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 catkin_package(
     INCLUDE_DIRS include
@@ -18,6 +19,7 @@ catkin_package(
       roscpp
       std_msgs
       geometry_msgs
+      four_wheel_steering_msgs
       diagnostic_updater)
 
 include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
