@@ -25,6 +25,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <geometry_msgs/Twist.h>
+#include <four_wheel_steering_msgs/FourWheelSteering.h>
 
 #include <list>
 
@@ -35,6 +36,7 @@ namespace cmd_mux
 class CmdMuxDiagnostics;
 struct CmdMuxDiagnosticsStatus;
 class VelocityTopicHandle;
+class FourWheelSteeringTopicHandle;
 class LockTopicHandle;
 
 /**
@@ -55,9 +57,11 @@ public:
   CmdMux(int window_size = 10);
   ~CmdMux();
 
-  bool hasPriority(const VelocityTopicHandle& twist);
+  bool hasPriority(const VelocityTopicHandle& cmd);
+  bool hasPriority(const FourWheelSteeringTopicHandle& cmd);
 
   void publishTwist(const geometry_msgs::TwistConstPtr& msg);
+  void publishFourWheelSteering(const four_wheel_steering_msgs::FourWheelSteeringConstPtr& msg);
 
   void updateDiagnostics(const ros::TimerEvent& event);
 
@@ -82,7 +86,7 @@ protected:
   boost::shared_ptr<velocity_topic_container> velocity_hs_;
   boost::shared_ptr<lock_topic_container>     lock_hs_;
 
-  ros::Publisher cmd_pub_;
+  ros::Publisher cmd_twist_pub_, cmd_4ws_pub_;
 
   geometry_msgs::Twist last_cmd_;
 
