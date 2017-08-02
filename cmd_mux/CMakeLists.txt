@@ -9,8 +9,6 @@ find_package(catkin REQUIRED
       four_wheel_steering_msgs
       diagnostic_updater)
 
-find_package(Boost REQUIRED)
-
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
 catkin_package(
@@ -22,7 +20,7 @@ catkin_package(
       four_wheel_steering_msgs
       diagnostic_updater)
 
-include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+include_directories(include ${catkin_INCLUDE_DIRS})
 
 add_executable(cmd_mux
     src/cmd_mux.cpp

@@ -26,8 +26,6 @@
 #include <diagnostic_updater/diagnostic_updater.h>
 #include <ros/ros.h>
 
-#include <boost/shared_ptr.hpp>
-
 namespace cmd_mux
 {
 

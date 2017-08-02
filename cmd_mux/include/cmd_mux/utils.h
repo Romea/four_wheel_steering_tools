@@ -22,8 +22,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-// This could be taken from #include <boost/algorithm/clamp.hpp>
-// but it seems that all versions of Boost have it.
+// This could be taken from #include <algorithm>
+// in C++17.
 
 /**
  * @brief Clamp a value to the range [min, max]

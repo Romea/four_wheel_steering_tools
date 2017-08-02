@@ -64,8 +64,8 @@ CmdMux::CmdMux(int window_size)
   cmd_4ws_pub_ = nh.advertise<four_wheel_steering_msgs::FourWheelSteering>("cmd_4ws_out", 1);
 
   /// Diagnostics:
-  diagnostics_ = boost::make_shared<diagnostics_type>();
-  status_      = boost::make_shared<status_type>();
+  diagnostics_ = std::make_shared<diagnostics_type>();
+  status_      = std::make_shared<status_type>();
   status_->velocity_hs = velocity_hs_;
   status_->lock_hs     = lock_hs_;
 

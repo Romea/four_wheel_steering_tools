@@ -31,8 +31,8 @@ namespace cmd_mux
 
 struct CmdMuxDiagnosticsStatus
 {
-  typedef boost::shared_ptr<CmdMuxDiagnosticsStatus> Ptr;
-  typedef boost::shared_ptr<const CmdMuxDiagnosticsStatus> ConstPtr;
+  typedef std::shared_ptr<CmdMuxDiagnosticsStatus> Ptr;
+  typedef std::shared_ptr<const CmdMuxDiagnosticsStatus> ConstPtr;
 
   double reading_age;
   ros::Time last_loop_update;

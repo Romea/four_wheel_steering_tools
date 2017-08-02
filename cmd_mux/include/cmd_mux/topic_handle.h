@@ -30,9 +30,6 @@
 #include <cmd_mux/utils.h>
 #include <cmd_mux/cmd_mux.h>
 
-#include <boost/utility.hpp>
-#include <boost/scoped_ptr.hpp>
-
 #include <string>
 #include <vector>
 
@@ -40,7 +37,7 @@ namespace cmd_mux
 {
 
 template<typename T>
-class TopicHandle_ : boost::noncopyable
+class TopicHandle_
 {
 public:
 
@@ -77,6 +74,10 @@ public:
   {
     subscriber_.shutdown();
   }
+
+  /// Replace boost::noncopyable
+  TopicHandle_( const TopicHandle_& ) = delete;
+  TopicHandle_& operator=(const TopicHandle_&) = delete;
 
   /**
    * @brief hasExpired
