@@ -146,12 +146,12 @@ int CmdMux::getLockPriority()
   return priority;
 }
 
-bool CmdMux::hasPriority(const VelocityTopicHandle& cmd)
+const std::string CmdMux::getHighestPriority(void)
 {
   const auto lock_priority = getLockPriority();
 
   LockTopicHandle::priority_type priority = 0;
-  std::string velocity_name = "NULL";
+  std::string cmd_name = "NULL";
 
   /// max_element on the priority of velocity topic handles satisfying
   /// that is NOT masked by the lock priority:
@@ -163,23 +163,11 @@ bool CmdMux::hasPriority(const VelocityTopicHandle& cmd)
       if (priority < velocity_priority)
       {
         priority = velocity_priority;
-        velocity_name = velocity_h.getName();
+        cmd_name = velocity_h.getName();
       }
     }
   }
 
-  return cmd.getName() == velocity_name;
-}
-
-bool CmdMux::hasPriority(const FourWheelSteeringTopicHandle& cmd)
-{
-  const auto lock_priority = getLockPriority();
-
-  LockTopicHandle::priority_type priority = 0;
-  std::string four_wheel_steer_name = "NULL";
-
-  /// max_element on the priority of four_wheel_steer topic handles satisfying
-  /// that is NOT masked by the lock priority:
   for (const auto& four_wheel_steer_h : *four_wheel_steer_hs_)
   {
     if (not four_wheel_steer_h.isMasked(lock_priority))
@@ -188,12 +176,23 @@ bool CmdMux::hasPriority(const FourWheelSteeringTopicHandle& cmd)
       if (priority < four_wheel_steer_priority)
       {
         priority = four_wheel_steer_priority;
-        four_wheel_steer_name = four_wheel_steer_h.getName();
+        cmd_name = four_wheel_steer_h.getName();
       }
     }
   }
+  return cmd_name;
+}
 
-  return cmd.getName() == four_wheel_steer_name;
+bool CmdMux::hasPriority(const VelocityTopicHandle& cmd)
+{
+  const std::string result = getHighestPriority();
+  return cmd.getName() == result;
+}
+
+bool CmdMux::hasPriority(const FourWheelSteeringTopicHandle& cmd)
+{
+  const std::string result = getHighestPriority();
+  return cmd.getName() == result;
 }
 
 } // namespace cmd_mux

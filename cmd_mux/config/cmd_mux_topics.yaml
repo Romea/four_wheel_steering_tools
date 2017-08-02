@@ -12,7 +12,7 @@ topics_vel:
   timeout : 0.5
   priority: 10
 -
-  name    : joystick
+  name    : joystick_vel
   topic   : joy_teleop/cmd_vel
   timeout : 0.5
   priority: 100
@@ -29,7 +29,7 @@ topics_vel:
 
 topics_4ws:
 -
-  name    : joystick
+  name    : joystick_4ws
   topic   : joy_teleop/cmd_four_wheel_steering
   timeout : 0.5
   priority: 90

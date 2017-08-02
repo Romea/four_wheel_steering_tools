@@ -63,6 +63,7 @@ public:
   void updateDiagnostics(const ros::TimerEvent& event);
 
 protected:
+  const std::string getHighestPriority(void);
 
   typedef CmdMuxDiagnostics       diagnostics_type;
   typedef CmdMuxDiagnosticsStatus status_type;
