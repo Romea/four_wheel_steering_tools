@@ -33,5 +33,5 @@
   <!--Teleop -->
   <remap from="/joy_teleop/cmd_vel" to="/vehicle_controller/cmd_vel"/>
   <remap from="/joy_teleop/cmd_four_wheel_steering" to="/vehicle_controller/cmd_four_wheel_steering"/>
-  <include file="$(find four_wheel_steering_control)/launch/teleop.launch" />
+  <include file="$(find four_wheel_steering_teleop)/launch/teleop.launch" />
 </launch>
