@@ -13,7 +13,7 @@ topics:
   priority: 10
 -
   name    : joystick
-  topic   : joy_vel
+  topic   : joy_teleop/cmd_vel
   timeout : 0.5
   priority: 100
 -

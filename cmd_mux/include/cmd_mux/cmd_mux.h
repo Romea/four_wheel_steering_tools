@@ -48,11 +48,11 @@ class CmdMux
 public:
 
   // @todo use this type alias when the compiler supports this C++11 feat.
-  //template<typename T>
-  //using handle_container = std::list<T>;
+  template<typename T>
+  using handle_container = std::list<T>;
   // @todo alternatively we do the following:
-  typedef std::list<VelocityTopicHandle> velocity_topic_container;
-  typedef std::list<LockTopicHandle>     lock_topic_container;
+//  typedef std::list<VelocityTopicHandle> velocity_topic_container;
+//  typedef std::list<LockTopicHandle>     lock_topic_container;
 
   CmdMux(int window_size = 10);
   ~CmdMux();
@@ -81,10 +81,10 @@ protected:
    * must reserve the number of handles initially.
    */
   // @todo use handle_container (see above)
-  //handle_container<VelocityTopicHandle> velocity_hs_;
-  //handle_container<LockTopicHandle> lock_hs_;
-  boost::shared_ptr<velocity_topic_container> velocity_hs_;
-  boost::shared_ptr<lock_topic_container>     lock_hs_;
+  std::shared_ptr< handle_container<VelocityTopicHandle> > velocity_hs_;
+  std::shared_ptr< handle_container<LockTopicHandle> > lock_hs_;
+//  boost::shared_ptr<velocity_topic_container> velocity_hs_;
+//  boost::shared_ptr<lock_topic_container>     lock_hs_;
 
   ros::Publisher cmd_twist_pub_, cmd_4ws_pub_;
 

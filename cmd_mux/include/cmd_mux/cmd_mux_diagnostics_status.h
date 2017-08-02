@@ -40,8 +40,8 @@ struct CmdMuxDiagnosticsStatus
 
   LockTopicHandle::priority_type priority;
 
-  boost::shared_ptr<CmdMux::velocity_topic_container> velocity_hs;
-  boost::shared_ptr<CmdMux::lock_topic_container>     lock_hs;
+  std::shared_ptr< CmdMux::handle_container<VelocityTopicHandle> > velocity_hs;
+  std::shared_ptr< CmdMux::handle_container<LockTopicHandle> >     lock_hs;
 
   CmdMuxDiagnosticsStatus()
     : reading_age(0),

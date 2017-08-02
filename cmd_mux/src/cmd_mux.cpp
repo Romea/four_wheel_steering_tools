@@ -54,8 +54,8 @@ CmdMux::CmdMux(int window_size)
   ros::NodeHandle nh_priv("~");
 
   /// Get topics and locks:
-  velocity_hs_ = boost::make_shared<velocity_topic_container>();
-  lock_hs_     = boost::make_shared<lock_topic_container>();
+  velocity_hs_ = std::make_shared< handle_container<VelocityTopicHandle> >();
+  lock_hs_     = std::make_shared< handle_container<LockTopicHandle> >();
   getTopicHandles(nh, nh_priv, "topics", *velocity_hs_);
   getTopicHandles(nh, nh_priv, "locks" , *lock_hs_ );
 
@@ -176,20 +176,20 @@ bool CmdMux::hasPriority(const FourWheelSteeringTopicHandle& cmd)
   LockTopicHandle::priority_type priority = 0;
   std::string velocity_name = "NULL";
 
-//  /// max_element on the priority of velocity topic handles satisfying
-//  /// that is NOT masked by the lock priority:
-//  for (const auto& velocity_h : *velocity_hs_)
-//  {
-//    if (not velocity_h.isMasked(lock_priority))
-//    {
-//      const auto velocity_priority = velocity_h.getPriority();
-//      if (priority < velocity_priority)
-//      {
-//        priority = velocity_priority;
-//        velocity_name = velocity_h.getName();
-//      }
-//    }
-//  }
+  /// max_element on the priority of velocity topic handles satisfying
+  /// that is NOT masked by the lock priority:
+  for (const auto& velocity_h : *velocity_hs_)
+  {
+    if (not velocity_h.isMasked(lock_priority))
+    {
+      const auto velocity_priority = velocity_h.getPriority();
+      if (priority < velocity_priority)
+      {
+        priority = velocity_priority;
+        velocity_name = velocity_h.getName();
+      }
+    }
+  }
 
   return cmd.getName() == velocity_name;
 }
