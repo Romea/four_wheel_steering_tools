@@ -78,6 +78,7 @@ protected:
    * must reserve the number of handles initially.
    */
   std::shared_ptr< handle_container<VelocityTopicHandle> > velocity_hs_;
+  std::shared_ptr< handle_container<FourWheelSteeringTopicHandle> > four_wheel_steer_hs_;
   std::shared_ptr< handle_container<LockTopicHandle> > lock_hs_;
 
   ros::Publisher cmd_twist_pub_, cmd_4ws_pub_;

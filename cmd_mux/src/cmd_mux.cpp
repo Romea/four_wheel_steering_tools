@@ -55,8 +55,10 @@ CmdMux::CmdMux(int window_size)
 
   /// Get topics and locks:
   velocity_hs_ = std::make_shared< handle_container<VelocityTopicHandle> >();
+  four_wheel_steer_hs_ = std::make_shared< handle_container<FourWheelSteeringTopicHandle> >();
   lock_hs_     = std::make_shared< handle_container<LockTopicHandle> >();
-  getTopicHandles(nh, nh_priv, "topics", *velocity_hs_);
+  getTopicHandles(nh, nh_priv, "topics_vel", *velocity_hs_);
+  getTopicHandles(nh, nh_priv, "topics_4ws", *four_wheel_steer_hs_);
   getTopicHandles(nh, nh_priv, "locks" , *lock_hs_ );
 
   /// Publisher for output topic:
@@ -174,24 +176,24 @@ bool CmdMux::hasPriority(const FourWheelSteeringTopicHandle& cmd)
   const auto lock_priority = getLockPriority();
 
   LockTopicHandle::priority_type priority = 0;
-  std::string velocity_name = "NULL";
+  std::string four_wheel_steer_name = "NULL";
 
-  /// max_element on the priority of velocity topic handles satisfying
+  /// max_element on the priority of four_wheel_steer topic handles satisfying
   /// that is NOT masked by the lock priority:
-  for (const auto& velocity_h : *velocity_hs_)
+  for (const auto& four_wheel_steer_h : *four_wheel_steer_hs_)
   {
-    if (not velocity_h.isMasked(lock_priority))
+    if (not four_wheel_steer_h.isMasked(lock_priority))
     {
-      const auto velocity_priority = velocity_h.getPriority();
-      if (priority < velocity_priority)
+      const auto four_wheel_steer_priority = four_wheel_steer_h.getPriority();
+      if (priority < four_wheel_steer_priority)
       {
-        priority = velocity_priority;
-        velocity_name = velocity_h.getName();
+        priority = four_wheel_steer_priority;
+        four_wheel_steer_name = four_wheel_steer_h.getName();
       }
     }
   }
 
-  return cmd.getName() == velocity_name;
+  return cmd.getName() == four_wheel_steer_name;
 }
 
 } // namespace cmd_mux

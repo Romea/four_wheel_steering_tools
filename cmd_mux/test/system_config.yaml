@@ -1,4 +1,4 @@
-topics:
+topics_vel:
 - name    : input1
   topic   : vel_1
   timeout : 0.7
