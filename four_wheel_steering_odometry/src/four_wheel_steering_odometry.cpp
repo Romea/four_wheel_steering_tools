@@ -81,10 +81,10 @@ void OdometryJointMessage::odomJointCallback (const sensor_msgs::JointState::Con
 bool OdometryJointMessage::getVehicleGeometryParam(const std::string& param_name, double& param_value)
 {
   bool success = true;
-  std::string param_path;
+  std::string param_path = "vehicle_controller/"+param_name;
   if(param_value < 0.0001)
   {
-    if(success &= nh_.searchParam(param_name, param_path))
+    if(success &= nh_.hasParam(param_path))
     {
       success &= nh_.getParam(param_path, param_value);
       ROS_INFO_STREAM(param_name<<" "<<param_value);
