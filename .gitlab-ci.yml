@@ -1,7 +1,7 @@
 # the following block is needed for the shared Docker-based runner
 image: docker:git
-variables:
-  DOCKER_DRIVER: "overlay" # recommended for docker-in-docker
+#variables:
+#  DOCKER_DRIVER: "overlay" # recommended for docker-in-docker
 #services:
 #  - docker:dind # enable docker-in-docker
 before_script:
