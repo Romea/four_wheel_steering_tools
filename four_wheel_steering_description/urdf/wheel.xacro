@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="wheel">
 
-  <!--<xacro:property name="M_PI" default="3.14159"/>-->
   <!-- Wheel Properties -->
   <xacro:property name="wheel_length" value="0.2" />
   <xacro:property name="wheel_radius" value="0.45" />

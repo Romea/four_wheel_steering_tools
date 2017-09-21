@@ -11,13 +11,19 @@
   <xacro:include filename="$(find four_wheel_steering_description)/urdf/sensors.xacro" />
 
   <!-- Base Properties -->
-  <xacro:property name="mass_base" value="500" />
   <xacro:property name="base_x_size" value="1.66000" />
   <xacro:property name="base_y_size" value="0.60000" />
   <xacro:property name="base_z_size" value="0.66000" />
 
   <xacro:property name="wheelbase" value="2" />
   <xacro:property name="track" value="1.1" />
+  <xacro:property name="mass_base" value="500" />
+
+  <!-- Wheel Properties -->
+  <xacro:property name="steering_link_mass" value="30" />
+  <xacro:property name="mass_wheel" value="5" />
+  <xacro:property name="wheel_length" value="0.2" />
+  <xacro:property name="wheel_radius" value="0.45" />
 
   <!-- Wheel Mounting Positions -->
   <xacro:property name="ground_clearance" value="0.35" />
