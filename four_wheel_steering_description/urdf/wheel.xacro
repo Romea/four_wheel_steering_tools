@@ -18,7 +18,15 @@
                   iyy="${mass_wheel/4.0*(wheel_radius*wheel_radius+wheel_length*wheel_length/3.0)}" iyz="0"
                   izz="${mass_wheel*wheel_radius*wheel_radius/2.0}" />
       </inertial>
-      <xacro:insert_block name="visual_wheel"/>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <xacro:insert_block name="visual_wheel"/>
+        </geometry>
+        <material name="black">
+          <color rgba="0 0 0 1"/>
+        </material>
+      </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>

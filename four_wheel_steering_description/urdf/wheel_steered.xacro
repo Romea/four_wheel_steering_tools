@@ -9,7 +9,15 @@
 
   <xacro:macro name="wheel_steered" params="wheel_prefix parent_link wheel_origin_y left_right *joint_origin *visual_steering *visual_wheel">
     <link name="${wheel_prefix}_steering">
-      <xacro:insert_block name="visual_steering"/>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${left_right * M_PI/2 - M_PI/2}"/>
+        <geometry>
+          <xacro:insert_block name="visual_steering"/>
+        </geometry>
+        <material name="blue">
+          <color rgba="0.2 0.2 0.6 1"/>
+        </material>
+      </visual>
       <inertial>
         <mass value="${steering_link_mass}" />
         <origin xyz="0 0 0" />

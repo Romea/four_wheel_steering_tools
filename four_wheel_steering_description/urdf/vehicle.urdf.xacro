@@ -48,26 +48,9 @@
         </material>
       </visual>
       <!-- visual steering -->
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-          <box size="0.05 ${steering_link_y} 0.05"/>
-        </geometry>
-        <material name="blue">
-          <color rgba="0.2 0.2 0.6 1"/>
-        </material>
-      </visual>
+      <box size="0.05 ${steering_link_y} 0.05"/>
       <!-- visual wheel -->
-      <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
-          <!--<mesh filename="package://four_wheel_steering_description/meshes/wheel.dae"/>-->
-        </geometry>
-        <material name="black">
-          <color rgba="0 0 0 1"/>
-        </material>
-      </visual>
+      <cylinder length="${wheel_length}" radius="${wheel_radius}"/>
     </xacro:chassis>
     <xacro:sensors/>
 
