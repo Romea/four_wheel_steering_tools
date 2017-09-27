@@ -20,6 +20,7 @@
   <depend>controller_manager</depend>
   <depend>teleop_twist_joy</depend>
   <depend>twist_mux</depend>
+  <depend>four_wheel_steering_teleop</depend>
 
   <export>
   </export>
