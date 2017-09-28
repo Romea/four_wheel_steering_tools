@@ -21,15 +21,10 @@ topics_vel:
   topic   : key_vel
   timeout : 0.5
   priority: 90
--
-  name    : tablet
-  topic   : tab_vel
-  timeout : 0.5
-  priority: 100
 
 topics_4ws:
 -
   name    : joystick_4ws
   topic   : joy_teleop/cmd_four_wheel_steering
   timeout : 0.5
-  priority: 90
+  priority: 110

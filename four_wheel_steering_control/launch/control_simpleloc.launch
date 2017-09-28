@@ -29,8 +29,15 @@
     <remap from="odometry/filtered" to="/odometry/filtered_gps" />
   </node>
 
+  <arg name="config_locks"  default="$(find cmd_mux)/config/cmd_mux_locks.yaml"/>
+  <arg name="config_topics" default="$(find cmd_mux)/config/cmd_mux_topics.yaml"/>
+  <remap from="cmd_vel_out" to="vehicle_controller/cmd_vel"/>
+  <remap from="cmd_4ws_out" to="vehicle_controller/cmd_four_wheel_steering"/>
+  <include file="$(find cmd_mux)/launch/cmd_mux.launch">
+    <arg name="config_locks"  value="$(arg config_locks)"/>
+    <arg name="config_topics" value="$(arg config_topics)"/>
+  </include>
+
   <!--Teleop -->
-  <remap from="/joy_teleop/cmd_vel" to="/vehicle_controller/cmd_vel"/>
-  <remap from="/joy_teleop/cmd_four_wheel_steering" to="/vehicle_controller/cmd_four_wheel_steering"/>
   <include file="$(find four_wheel_steering_teleop)/launch/teleop.launch" />
 </launch>
